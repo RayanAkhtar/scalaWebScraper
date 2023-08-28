@@ -27,8 +27,10 @@ object generalHelpers extends App {
     choice
   }
 
+
   /**
    * Gets a response from the user when asking for a yes/no question
+   * Tested on integers and characters
    *
    * @return returns whether the user said yes or no to the decision
    */
@@ -46,6 +48,47 @@ object generalHelpers extends App {
       else if (choice == 'n') return false
     }
     false
+  }
+
+  //todo test
+  def takeNumber(message: String): Int = {
+    var choice = -1
+
+    while (choice < 0) {
+      println(message)
+      val tryChoice = Try(scala.io.StdIn.readInt())
+
+      choice = tryChoice match {
+        case Success(value) => value
+        case Failure(_) =>
+          println("Please only enter numbers")
+          -1
+      }
+
+    }
+
+    choice
+  }
+
+  // todo test
+  def takeStringValue(message: String): String = {
+    var choice = ""
+    while (choice.isEmpty) {
+      println(message)
+      val tryChoice = Try(scala.io.StdIn.readLine().trim)
+      choice = tryChoice match {
+        case Success(value) => value
+        case Failure(_) =>
+          println("Please enter a valid string")
+          ""
+      }
+    }
+    choice
+  }
+
+
+  def takeMultipleStrings(message: String): List[String] = {
+
   }
 
 }
