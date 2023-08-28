@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/webscraper.iml" filepath="$PROJECT_DIR$/.idea/modules/webscraper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/webscraper-build.iml" filepath="$PROJECT_DIR$/.idea/modules/webscraper-build.iml" />
     </modules>
   </component>
 </project>
