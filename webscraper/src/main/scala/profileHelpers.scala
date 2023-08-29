@@ -1,9 +1,28 @@
 import java.io.{File, PrintWriter}
 
+
 object profileHelpers {
 
+  private def writeYesOrNo(): String = if (userInputHelpers.takeYesOrNo()) "yes" else "no"
+
+
+  private val fieldNameQuestionType: Map[String, String] = Map(
+    ("City", "string"),
+    ("Year of Study", "int-range"),
+    ("Interested in", "multi-string"),
+    ("Search terms", "multi-string"),
+    ("Entry Level Only", "boolean"),
+    ("Part-time", "boolean"),
+    ("Full-time", "boolean"),
+    ("Internships", "boolean"),
+    ("Placements", "boolean"),
+    ("Minimum Salary", "int")
+  ) // question type will be treated similarly to an enum
+
+  /**
+   * A method to create a new user file, this is called whenever the profile menu notices that the user doesn't have a profile
+   */
   def createUserFile(): Unit = {
-    def writeYesOrNo(): String = if (userInputHelpers.takeYesOrNo()) "yes" else "no"
 
     val userProfile = new File(globals.profilePath)
     val fileWriter = new PrintWriter(userProfile)
@@ -46,6 +65,40 @@ object profileHelpers {
     fileWriter.write("Minimum Salary: " + userInputHelpers.takeNumber("Please enter the lowest salary you are looking for: ") + "\n")
     fileWriter.close()
 
+  }
+
+  /**
+   * Updates a given line in a user's profile
+   *
+   * @param lineToChange The line number that you wish to change
+   * @param lineData The new value that you want for that line
+   */
+  def updateProfileLine(lineToChange: Int, lineData: String): Unit = {
+    val indexToSplit = lineData.indexOf(':')
+    val fieldName = lineData.substring(0, indexToSplit)
+    val maybeQuestionType = fieldNameQuestionType.get(fieldName)
+    val questionType = maybeQuestionType.get
+    val updatedValue = getUpdatedValue(questionType)
+    fileHandlingHelpers.updateLine(globals.profilePath, lineToChange, s"$fieldName: $updatedValue")
+    println("The file has been updated, enter any value to exit")
+    scala.io.StdIn.readLine()
+  }
+
+
+  /**
+   * Asks the new user to enter a new value for the question type provided
+   *
+   * @param questionType The question to ask the user
+   * @return The value that the user enters for that question
+   */
+  private def getUpdatedValue(questionType: String): String = {
+    questionType match {
+      case "string" => userInputHelpers.takeStringValue("Please enter a new value: ")
+      case "int-range" => userInputHelpers.takeNumberRange(1, 4).toString
+      case "int" => userInputHelpers.takeNumber("Please enter a new number: ").toString
+      case "multi-string" => conversionHelpers.listToString(userInputHelpers.takeMultipleStrings("Please enter a new set of values: "))
+      case "boolean" => writeYesOrNo()
+    }
   }
 
 

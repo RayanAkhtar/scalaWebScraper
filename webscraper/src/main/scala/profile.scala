@@ -1,4 +1,4 @@
-import java.io.{File}
+import java.io.File
 
 object profile {
 
@@ -26,10 +26,12 @@ object profile {
           println("\n")
           checkUserProfile()
         case 2 =>
-          println("Now going edit user profile") // todo implement
+          editUserProfile()
         case 3 =>
           println("\n")
           fileHandlingHelpers.deleteFile(globals.profilePath)
+          println("Profile has been deleted, please enter a value to return to the main menu: ")
+          scala.io.StdIn.readLine()
           return
         case 4 =>
           return
@@ -62,6 +64,20 @@ object profile {
     fileHandlingHelpers.printFile(globals.profilePath)
     println("Please enter a value to go back to the main menu: ")
     scala.io.StdIn.readLine()
+  }
+
+  /**
+   * A method that allows the user to edit their profile
+   */
+  private def editUserProfile(): Unit = {
+    println()
+    fileHandlingHelpers.printFile(globals.profilePath, "numbered")
+    println("Enter the number of the line you wish to edit: ")
+    val numberOfLines = fileHandlingHelpers.getNumberOfLines(globals.profilePath)
+    val lineToChange = userInputHelpers.takeNumberRange(1, numberOfLines)
+
+    val lineData = fileHandlingHelpers.getLine(globals.profilePath, lineToChange)
+    profileHelpers.updateProfileLine(lineToChange, lineData)
   }
 
 }
