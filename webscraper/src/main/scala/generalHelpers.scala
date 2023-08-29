@@ -1,3 +1,4 @@
+import scala.collection.mutable.ListBuffer
 import scala.util.{Failure, Success, Try}
 
 object generalHelpers extends App {
@@ -50,7 +51,14 @@ object generalHelpers extends App {
     false
   }
 
-  //todo test
+
+  /**
+   * Gets a number from the user
+   * Tested for numbers and strings
+   *
+   * @param message The message you wish to send to the user beforehand
+   * @return The number that the user entered
+   */
   def takeNumber(message: String): Int = {
     var choice = -1
 
@@ -66,11 +74,17 @@ object generalHelpers extends App {
       }
 
     }
-
     choice
   }
 
-  // todo test
+
+  /**
+   * Gets a string from the user, trimming off trailing and leading whitespace
+   * Tested on string that contain and don't contain whitespace
+   *
+   * @param message The message you wish to display to the user before getting the string from the user
+   * @return The string that the user enters
+   */
   def takeStringValue(message: String): String = {
     var choice = ""
     while (choice.isEmpty) {
@@ -87,8 +101,38 @@ object generalHelpers extends App {
   }
 
 
+  /**
+   * Gets multiple non-empty strings from the user, trimming leading and trailing whitespace
+   * Tested on strings that have and don't have leading and trailing whitespace
+   *
+   * @param message The message to send to the user before asking for a list of strings
+   * @return The list of strings to return to the user
+   */
   def takeMultipleStrings(message: String): List[String] = {
+    val stringList = new ListBuffer[String]()
+    var valid = false
+    var choice = ""
+    println(message)
+    println("Leave this input blank when you are finished")
 
+    while (!valid) {
+      val tryChoice = Try(scala.io.StdIn.readLine().trim)
+      choice = tryChoice match {
+        case Success(value) => value
+        case Failure(_) =>
+          println("Please enter a valid string")
+          ""
+      }
+
+      if (choice != "") {
+        stringList.append(choice)
+        println("Please enter another value, or leave empty to finish")
+      } else {
+        valid = true
+      }
+
+    }
+    stringList.toList
   }
 
 }
