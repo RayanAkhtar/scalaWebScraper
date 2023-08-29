@@ -1,7 +1,7 @@
 import scala.collection.mutable.ListBuffer
 import scala.util.{Failure, Success, Try}
 
-object generalHelpers extends App {
+object userInputHelpers extends App {
 
   /**
    * Gets an integer value between two integer numbers
